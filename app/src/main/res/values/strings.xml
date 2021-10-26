@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">mobile-app-soft-test</string>
+    <string name="archive_button_description">Archive button</string>
 </resources>
