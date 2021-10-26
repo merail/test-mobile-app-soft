@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "300382492452",
+    "project_id": "mobile-app-soft-test",
+    "storage_bucket": "mobile-app-soft-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:300382492452:android:126c44c4eda5e80ad945b1",
+        "android_client_info": {
+          "package_name": "me.rail.mobileappsofttest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "300382492452-lb7ef7suavrvmp5b1h44n51odfmnmjsn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-2ynXJ15GvDfiKPSTEhE9yI9qfKViTlM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "300382492452-lb7ef7suavrvmp5b1h44n51odfmnmjsn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
