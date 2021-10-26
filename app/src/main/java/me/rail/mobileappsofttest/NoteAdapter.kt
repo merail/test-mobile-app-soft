@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import me.rail.mobileappsofttest.databinding.ItemNoteBinding
 
-class NoteAdapter(private val notes: ArrayList<String>) :
+class NoteAdapter(private val notes: ArrayList<Note>) :
     RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: ItemNoteBinding) : RecyclerView.ViewHolder(binding.root)
@@ -17,7 +17,10 @@ class NoteAdapter(private val notes: ArrayList<String>) :
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = notes[position]
+
+        holder.binding.text.text = item.text
     }
 
     override fun getItemCount() = notes.size
