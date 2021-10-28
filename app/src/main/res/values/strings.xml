@@ -5,4 +5,5 @@
     <string name="up_note_in_list">Up note in list</string>
     <string name="button_for_pin_note">Button for pin note</string>
     <string name="button_for_share_note">Button for share note</string>
+    <string name="add_new_note">Add new note</string>
 </resources>
