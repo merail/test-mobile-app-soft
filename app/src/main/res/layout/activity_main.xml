@@ -1,70 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingHorizontal="15dp">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/topbar"
+            android:id="@+id/main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent"
+            android:paddingHorizontal="15dp">
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/topbar"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="11dp"
-                android:fontFamily="@font/nunito_regular"
-                android:text="@string/title"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="11dp"
+                    android:fontFamily="@font/nunito_regular"
+                    android:text="@string/title"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/archive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/archive"
+                    android:contentDescription="@string/archive_button_description"
+                    app:layout_constraintBottom_toBottomOf="@id/title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/title" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="18dp"
+                app:layout_constraintBottom_toTopOf="@id/add"
+                app:layout_constraintTop_toBottomOf="@id/topbar" />
 
             <ImageButton
-                android:id="@+id/archive"
+                android:id="@+id/add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/archive"
-                android:contentDescription="@string/archive_button_description"
-                app:layout_constraintBottom_toBottomOf="@id/title"
+                android:layout_marginVertical="16dp"
+                android:background="@drawable/add"
+                android:contentDescription="@string/add_new_note"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/title" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recyclerview" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="18dp"
-            app:layout_constraintBottom_toTopOf="@id/add"
-            app:layout_constraintTop_toBottomOf="@id/topbar" />
-
-        <ImageButton
-            android:id="@+id/add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="16dp"
-            android:background="@drawable/add"
-            android:contentDescription="@string/add_new_note"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recyclerview" />
 
         <EditText
             android:id="@+id/edittext"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:windowSoftInputMode="adjustPan"
-            android:isScrollContainer="true"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="96dp"
+            android:layout_gravity="top"
+            android:layout_marginBottom="300dp"
+            android:background="@drawable/edittext_shape"
+            android:fontFamily="@font/nunito_regular"
+            android:gravity="top"
+            android:inputType="textVisiblePassword"
+            android:padding="16dp"
+            android:textColor="@color/black"
+            android:textCursorDrawable="@drawable/cursor_shape"
+            android:textSize="16sp"
             android:visibility="gone"
-            tools:ignore="Autofill,LabelFor,TextFields" />
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
