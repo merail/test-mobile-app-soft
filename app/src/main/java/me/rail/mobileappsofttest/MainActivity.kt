@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         binding?.add?.setOnClickListener {
             binding?.edittext?.visibility = View.VISIBLE
             binding?.edittext?.requestFocus()
-            binding?.edittext?.setListener(getOnKeyboardBackPressedListener())
+            binding?.edittext?.setOnKeyboardBackPressedListener(getOnKeyboardBackPressedListener())
             val imm: InputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.showSoftInput(binding?.edittext, InputMethodManager.SHOW_IMPLICIT)
