@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import me.rail.mobileappsofttest.databinding.ItemNoteBinding
 import me.rail.mobileappsofttest.db.Note
 
-class NoteAdapter(private val notes: ArrayList<Note>) :
+class NoteAdapter(private val notes: List<Note>) :
     RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: ItemNoteBinding) : RecyclerView.ViewHolder(binding.root)

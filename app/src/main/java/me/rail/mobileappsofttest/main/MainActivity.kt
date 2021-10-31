@@ -9,7 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import me.rail.mobileappsofttest.R
 import me.rail.mobileappsofttest.databinding.ActivityMainBinding
 
@@ -22,12 +26,22 @@ class MainActivity : AppCompatActivity() {
 
     private var isKeyboardVisible = false
 
+    private var noteAdapter: NoteAdapter? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        model.getAllNotes()
+        binding?.recyclerview?.layoutManager =
+            LinearLayoutManager(applicationContext, RecyclerView.VERTICAL, false)
+
+        lifecycleScope.launch {
+            model.notes.observeForever {
+                noteAdapter = NoteAdapter(it)
+                binding?.recyclerview?.adapter = noteAdapter
+            }
+        }
 
         binding?.add?.setOnClickListener {
             changeMainBackgroundColor(R.color.blur)
