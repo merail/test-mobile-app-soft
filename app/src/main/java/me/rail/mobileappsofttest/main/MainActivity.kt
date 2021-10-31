@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,6 +36,13 @@ class MainActivity : AppCompatActivity() {
 
         binding?.recyclerview?.layoutManager =
             LinearLayoutManager(applicationContext, RecyclerView.VERTICAL, false)
+
+        binding?.recyclerview?.addItemDecoration(
+            DividerItemDecoration(
+                binding?.recyclerview?.context,
+                DividerItemDecoration.VERTICAL
+            )
+        )
 
         lifecycleScope.launch {
             model.notes.observeForever {
