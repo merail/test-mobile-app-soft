@@ -10,13 +10,13 @@ interface NotesDao {
     fun getAll(): Flow<List<CachedNote>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(vararg notes: CachedNote)
+    suspend fun insert(vararg note: CachedNote)
 
     @Update
-    suspend fun update(vararg notes: CachedNote)
+    suspend fun update(vararg note: CachedNote)
 
     @Delete
-    suspend fun delete(vararg notes: CachedNote)
+    suspend fun delete(vararg note: CachedNote)
 
     @Query("UPDATE notes SET pin = :pin WHERE id =:id")
     suspend fun update(id: String, pin: Boolean)

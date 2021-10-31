@@ -4,18 +4,18 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
-import androidx.room.Room
 import me.rail.mobileappsofttest.databinding.ActivityMainBinding
-import me.rail.mobileappsofttest.db.CachedNote
-import me.rail.mobileappsofttest.db.NotesDatabase
 
 
 class MainActivity : AppCompatActivity() {
     private var binding: ActivityMainBinding? = null
+
+    private val model: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +32,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding?.create?.setOnClickListener {
-//            val db = Room.databaseBuilder(applicationContext, NotesDatabase::class.java, "notes").build()
-//            db.notesDao().insert(CachedNote(0, binding?.edittext?.text.toString(), false))
+            model.addNote(applicationContext, binding?.edittext?.text.toString())
         }
     }
 
