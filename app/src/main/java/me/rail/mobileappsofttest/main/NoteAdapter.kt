@@ -1,9 +1,10 @@
-package me.rail.mobileappsofttest
+package me.rail.mobileappsofttest.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import me.rail.mobileappsofttest.databinding.ItemNoteBinding
+import me.rail.mobileappsofttest.db.Note
 
 class NoteAdapter(private val notes: ArrayList<Note>) :
     RecyclerView.Adapter<NoteAdapter.ViewHolder>() {

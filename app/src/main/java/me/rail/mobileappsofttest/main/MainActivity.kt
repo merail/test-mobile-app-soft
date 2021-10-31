@@ -1,4 +1,4 @@
-package me.rail.mobileappsofttest
+package me.rail.mobileappsofttest.main
 
 import android.content.Context
 import android.os.Bundle
@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import dagger.hilt.android.AndroidEntryPoint
+import me.rail.mobileappsofttest.R
 import me.rail.mobileappsofttest.databinding.ActivityMainBinding
 
 

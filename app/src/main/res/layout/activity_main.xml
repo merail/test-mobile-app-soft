@@ -62,7 +62,7 @@
                 app:layout_constraintTop_toBottomOf="@id/recyclerview" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <me.rail.mobileappsofttest.NoteEditText
+        <me.rail.mobileappsofttest.view.NoteEditText
             android:id="@+id/edittext"
             android:layout_width="match_parent"
             android:layout_height="96dp"

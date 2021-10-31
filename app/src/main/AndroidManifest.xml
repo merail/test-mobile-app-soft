@@ -16,7 +16,7 @@
         android:theme="@style/Theme.Mobileappsofttest"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".MainActivity"
+            android:name=".main.MainActivity"
             android:windowSoftInputMode="adjustNothing"
             android:exported="true">
             <intent-filter>

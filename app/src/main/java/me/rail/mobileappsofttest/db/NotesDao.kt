@@ -7,16 +7,16 @@ import kotlinx.coroutines.flow.Flow
 interface NotesDao {
 
     @Query("SELECT * FROM notes")
-    fun getAll(): Flow<List<CachedNote>>
+    fun getAll(): Flow<List<Note>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(vararg note: CachedNote)
+    suspend fun insert(vararg note: Note)
 
     @Update
-    suspend fun update(vararg note: CachedNote)
+    suspend fun update(vararg note: Note)
 
     @Delete
-    suspend fun delete(vararg note: CachedNote)
+    suspend fun delete(vararg note: Note)
 
     @Query("UPDATE notes SET pin = :pin WHERE id =:id")
     suspend fun update(id: String, pin: Boolean)

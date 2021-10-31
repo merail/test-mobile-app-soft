@@ -1,4 +1,4 @@
-package me.rail.mobileappsofttest
+package me.rail.mobileappsofttest.view
 
 import android.annotation.SuppressLint
 import android.content.Context
