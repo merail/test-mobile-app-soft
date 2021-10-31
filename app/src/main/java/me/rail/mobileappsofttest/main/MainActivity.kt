@@ -1,4 +1,4 @@
-package me.rail.mobileappsofttest
+package me.rail.mobileappsofttest.main
 
 import android.content.Context
 import android.os.Bundle
@@ -9,9 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
+import dagger.hilt.android.AndroidEntryPoint
+import me.rail.mobileappsofttest.R
 import me.rail.mobileappsofttest.databinding.ActivityMainBinding
 
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private var binding: ActivityMainBinding? = null
 
@@ -23,6 +26,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        model.getAllNotes()
 
         binding?.add?.setOnClickListener {
             changeMainBackgroundColor(R.color.blur)
