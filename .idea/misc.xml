@@ -3,7 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Admin/StudioProjects/mobileappsofttest/app/src/main/res/color/edittext_underline.xml" value="0.14635416666666667" />
         <entry key="..\:/Users/Admin/StudioProjects/mobileappsofttest/app/src/main/res/drawable/archive.xml" value="0.14635416666666667" />
+        <entry key="..\:/Users/Admin/StudioProjects/mobileappsofttest/app/src/main/res/drawable/cursor_shape.xml" value="0.25092592592592594" />
+        <entry key="..\:/Users/Admin/StudioProjects/mobileappsofttest/app/src/main/res/drawable/edittext_shape.xml" value="0.2703125" />
         <entry key="..\:/Users/Admin/StudioProjects/mobileappsofttest/app/src/main/res/drawable/pin.xml" value="0.13541666666666666" />
         <entry key="..\:/Users/Admin/StudioProjects/mobileappsofttest/app/src/main/res/drawable/share.xml" value="0.13541666666666666" />
         <entry key="..\:/Users/Admin/StudioProjects/mobileappsofttest/app/src/main/res/drawable/up.xml" value="0.13541666666666666" />

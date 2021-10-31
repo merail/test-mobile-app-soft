@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">mobile-app-soft-test</string>
+    <string name="app_name">Mobile App Soft Test</string>
     <string name="archive_button_description">Archive button</string>
     <string name="title">Think. Perform. Relax.</string>
     <string name="up_note_in_list">Up note in list</string>
     <string name="button_for_pin_note">Button for pin note</string>
     <string name="button_for_share_note">Button for share note</string>
     <string name="add_new_note">Add new note</string>
+    <string name="create_new_note">Create new note</string>
 </resources>
