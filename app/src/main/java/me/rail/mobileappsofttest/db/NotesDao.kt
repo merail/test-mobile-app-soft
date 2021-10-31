@@ -4,20 +4,20 @@ import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface AppsDao {
+interface NotesDao {
 
-    @Query("SELECT * FROM apps")
+    @Query("SELECT * FROM notes")
     fun getAll(): Flow<List<CachedNote>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(vararg apps: CachedNote)
+    suspend fun insert(vararg notes: CachedNote)
 
     @Update
-    suspend fun update(vararg apps: CachedNote)
+    suspend fun update(vararg notes: CachedNote)
 
     @Delete
-    suspend fun delete(vararg apps: CachedNote)
+    suspend fun delete(vararg notes: CachedNote)
 
-    @Query("UPDATE apps SET pin = :pin WHERE id =:id")
+    @Query("UPDATE notes SET pin = :pin WHERE id =:id")
     suspend fun update(id: String, pin: Boolean)
 }

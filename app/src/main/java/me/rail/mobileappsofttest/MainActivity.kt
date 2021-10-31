@@ -8,7 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
+import androidx.room.Room
 import me.rail.mobileappsofttest.databinding.ActivityMainBinding
+import me.rail.mobileappsofttest.db.CachedNote
+import me.rail.mobileappsofttest.db.NotesDatabase
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,7 +32,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding?.create?.setOnClickListener {
-
+//            val db = Room.databaseBuilder(applicationContext, NotesDatabase::class.java, "notes").build()
+//            db.notesDao().insert(CachedNote(0, binding?.edittext?.text.toString(), false))
         }
     }
 
