@@ -20,4 +20,7 @@ interface NotesDao {
 
     @Query("UPDATE notes SET pin = :pin WHERE id =:id")
     suspend fun update(id: String, pin: Boolean)
+
+    @Query("SELECT COUNT(id) FROM notes")
+    fun getCount(): Int
 }

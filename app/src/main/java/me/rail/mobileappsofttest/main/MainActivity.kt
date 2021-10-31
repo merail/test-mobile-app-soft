@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
             toggleEditTextVisibility()
             toggleKeyboardVisibility()
             changeMainBackgroundColor(R.color.white)
-            model.addNote(applicationContext, binding?.edittext?.text.toString())
+            model.addNote(binding?.edittext?.text.toString())
         }
     }
 
