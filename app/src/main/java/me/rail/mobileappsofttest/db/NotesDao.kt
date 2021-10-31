@@ -18,8 +18,8 @@ interface NotesDao {
     @Delete
     suspend fun delete(vararg note: Note)
 
-    @Query("UPDATE notes SET pin = :pin WHERE id =:id")
-    suspend fun update(id: String, pin: Boolean)
+    @Query("UPDATE notes SET id = :id + 1 WHERE id = :id")
+    suspend fun update(id: Int)
 
     @Query("SELECT COUNT(id) FROM notes")
     fun getCount(): Int

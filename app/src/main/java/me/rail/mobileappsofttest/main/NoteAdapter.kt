@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import me.rail.mobileappsofttest.databinding.ItemNoteBinding
 import me.rail.mobileappsofttest.db.Note
 
-class NoteAdapter(private val notes: List<Note>) :
+class NoteAdapter(private val notes: List<Note>, private val onUpClick: ((Note) -> Unit)? = null) :
     RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: ItemNoteBinding) : RecyclerView.ViewHolder(binding.root)
@@ -20,6 +20,10 @@ class NoteAdapter(private val notes: List<Note>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = notes[position]
+
+        holder.binding.up.setOnClickListener {
+            onUpClick?.invoke(item)
+        }
 
         holder.binding.text.text = item.text
     }

@@ -17,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import me.rail.mobileappsofttest.R
 import me.rail.mobileappsofttest.databinding.ActivityMainBinding
+import me.rail.mobileappsofttest.db.Note
 
 
 @AndroidEntryPoint
@@ -27,26 +28,16 @@ class MainActivity : AppCompatActivity() {
 
     private var isKeyboardVisible = false
 
-    private var noteAdapter: NoteAdapter? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        binding?.recyclerview?.layoutManager =
-            LinearLayoutManager(applicationContext, RecyclerView.VERTICAL, false)
-
-        binding?.recyclerview?.addItemDecoration(
-            DividerItemDecoration(
-                binding?.recyclerview?.context,
-                DividerItemDecoration.VERTICAL
-            )
-        )
+        initializeRecyclerView()
 
         lifecycleScope.launch {
             model.notes.observeForever {
-                noteAdapter = NoteAdapter(it)
+                val noteAdapter = NoteAdapter(it, onUpClick = ::onUpClick)
                 binding?.recyclerview?.adapter = noteAdapter
             }
         }
@@ -112,5 +103,21 @@ class MainActivity : AppCompatActivity() {
             imm.showSoftInput(binding?.edittext, InputMethodManager.SHOW_IMPLICIT)
 
         isKeyboardVisible = !isKeyboardVisible
+    }
+
+    private fun initializeRecyclerView() {
+        binding?.recyclerview?.layoutManager =
+            LinearLayoutManager(applicationContext, RecyclerView.VERTICAL, false)
+
+        binding?.recyclerview?.addItemDecoration(
+            DividerItemDecoration(
+                binding?.recyclerview?.context,
+                DividerItemDecoration.VERTICAL
+            )
+        )
+    }
+
+    private fun onUpClick(note: Note) {
+        model.setNoteToTop(note)
     }
 }
