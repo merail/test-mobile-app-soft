@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity() {
             toggleKeyboardVisibility()
             changeMainBackgroundColor(R.color.white)
             model.addNote(binding?.edittext?.text.toString())
+            binding?.edittext?.text?.clear()
         }
     }
 
@@ -68,6 +69,7 @@ class MainActivity : AppCompatActivity() {
                 isKeyboardVisible = !isKeyboardVisible
                 toggleEditTextVisibility()
                 changeMainBackgroundColor(R.color.white)
+                binding?.edittext?.text?.clear()
             }
         }
 
