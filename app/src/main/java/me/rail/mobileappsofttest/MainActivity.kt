@@ -27,6 +27,10 @@ class MainActivity : AppCompatActivity() {
                 getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.showSoftInput(binding?.edittext, InputMethodManager.SHOW_IMPLICIT)
         }
+
+        binding?.create?.setOnClickListener {
+
+        }
     }
 
     private fun getOnKeyboardBackPressedListener(): MutableLiveData<Boolean> {
