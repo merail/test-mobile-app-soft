@@ -6,4 +6,7 @@
     <string name="button_for_pin_note">Button for pin note</string>
     <string name="button_for_share_note">Button for share note</string>
     <string name="add_new_note">Add new note</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="back_to_mainactivity">Back to MainActivity</string>
 </resources>
