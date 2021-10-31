@@ -17,21 +17,25 @@ class MainActivity : AppCompatActivity() {
 
     private val model: MainViewModel by viewModels()
 
+    private var isKeyboardVisible = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         binding?.add?.setOnClickListener {
-            binding?.edittext?.visibility = View.VISIBLE
+            changeMainBackgroundColor(R.color.blur)
+            toggleEditTextVisibility()
             binding?.edittext?.requestFocus()
+            toggleKeyboardVisibility()
             binding?.edittext?.setOnKeyboardBackPressedListener(getOnKeyboardBackPressedListener())
-            val imm: InputMethodManager =
-                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(binding?.edittext, InputMethodManager.SHOW_IMPLICIT)
         }
 
         binding?.create?.setOnClickListener {
+            toggleEditTextVisibility()
+            toggleKeyboardVisibility()
+            changeMainBackgroundColor(R.color.white)
             model.addNote(applicationContext, binding?.edittext?.text.toString())
         }
     }
@@ -41,22 +45,43 @@ class MainActivity : AppCompatActivity() {
         onKeyboardBackPressed.value = false
 
         onKeyboardBackPressed.observeForever {
-            if (it)
-                binding?.main?.setBackgroundColor(
-                    ContextCompat.getColor(
-                        applicationContext,
-                        R.color.white
-                    )
-                )
-            else
-                binding?.main?.setBackgroundColor(
-                    ContextCompat.getColor(
-                        applicationContext,
-                        R.color.blur
-                    )
-                )
+            if (it) {
+                isKeyboardVisible = !isKeyboardVisible
+                toggleEditTextVisibility()
+                changeMainBackgroundColor(R.color.white)
+            }
         }
 
         return onKeyboardBackPressed
+    }
+
+    private fun changeMainBackgroundColor(color: Int) {
+        binding?.main?.setBackgroundColor(
+            ContextCompat.getColor(
+                applicationContext,
+                color
+            )
+        )
+    }
+
+    private fun toggleEditTextVisibility() {
+        binding?.edittext?.visibility =
+            if (binding?.edittext?.visibility == View.GONE) View.VISIBLE else View.GONE
+        binding?.create?.visibility =
+            if (binding?.create?.visibility == View.GONE) View.VISIBLE else View.GONE
+    }
+
+    private fun toggleKeyboardVisibility() {
+        val imm: InputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        if (isKeyboardVisible)
+            imm.hideSoftInputFromWindow(
+                binding?.root?.windowToken,
+                InputMethodManager.HIDE_IMPLICIT_ONLY
+            )
+        else
+            imm.showSoftInput(binding?.edittext, InputMethodManager.SHOW_IMPLICIT)
+
+        isKeyboardVisible = !isKeyboardVisible
     }
 }
