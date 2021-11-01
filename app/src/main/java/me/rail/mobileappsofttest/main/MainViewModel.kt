@@ -31,16 +31,16 @@ class MainViewModel @Inject constructor(private val notesDao: NotesDao) : ViewMo
     fun setNoteToTop(note: Note, isFromPinClick: Boolean = false) {
         viewModelScope.launch(Dispatchers.IO) {
             notesDao.delete(note)
-            for (i in note.position downTo 0) {
+            for (i in note.position downTo notesDao.getPinnedCount()) {
                 notesDao.incrementPosition(i)
                 notesDao.incrementPositionBeforePin(i)
             }
 
-            val positionBeforePin = if (isFromPinClick) note.positionBeforePin else 0
+            val positionBeforePin = if (isFromPinClick) note.positionBeforePin else notesDao.getPinnedCount()
             val pin = if (isFromPinClick) true else note.pin
             notesDao.insert(
                 note.copy(
-                    position = 0,
+                    position = notesDao.getPinnedCount(),
                     pin = pin,
                     positionBeforePin = positionBeforePin
                 )

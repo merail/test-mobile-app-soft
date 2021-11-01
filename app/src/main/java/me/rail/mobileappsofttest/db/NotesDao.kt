@@ -32,4 +32,7 @@ interface NotesDao {
 
     @Query("SELECT COUNT(position) FROM notes")
     fun getCount(): Int
+
+    @Query("SELECT COUNT(position) FROM notes WHERE pin = 1")
+    fun getPinnedCount(): Int
 }
