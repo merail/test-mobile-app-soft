@@ -37,7 +37,12 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             model.notes.observeForever {
-                val noteAdapter = NoteAdapter(it, onUpClick = ::onUpClick)
+                val noteAdapter = NoteAdapter(
+                    applicationContext,
+                    it,
+                    onUpClick = ::onUpClick,
+                    onPinClick = ::onPinClick
+                )
                 binding?.recyclerview?.adapter = noteAdapter
             }
         }
@@ -119,5 +124,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun onUpClick(note: Note) {
         model.setNoteToTop(note)
+    }
+
+    private fun onPinClick(note: Note) {
+        model.togglePin(note)
     }
 }

@@ -6,7 +6,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "notes")
 data class Note(
-    @PrimaryKey @ColumnInfo(name = "id") val id: Int,
+    @PrimaryKey @ColumnInfo(name = "position") val position: Int,
     @ColumnInfo(name = "text") val text: String,
-    @ColumnInfo(name = "pin") val pin: Boolean
+    @ColumnInfo(name = "pin") val pin: Boolean,
+    @ColumnInfo(name = "positionBeforePin") val positionBeforePin: Int
 )
