@@ -16,7 +16,8 @@ class NoteAdapter(
     private val context: Context,
     private val notes: List<Note>,
     private val onUpClick: ((Note) -> Unit)? = null,
-    private val onPinClick: ((Note) -> Unit)? = null
+    private val onPinClick: ((Note) -> Unit)? = null,
+    private val onNoteClick: ((Note) -> Unit)? = null
 ) :
     RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
 
@@ -31,6 +32,10 @@ class NoteAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = notes[position]
+
+        holder.binding.text.setOnClickListener {
+            onNoteClick?.invoke(item)
+        }
 
         holder.binding.up.setOnClickListener {
             onUpClick?.invoke(item)

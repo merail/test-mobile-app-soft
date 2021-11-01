@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import me.rail.mobileappsofttest.NoteFragment
 import me.rail.mobileappsofttest.R
 import me.rail.mobileappsofttest.databinding.ActivityMainBinding
 import me.rail.mobileappsofttest.db.Note
@@ -41,7 +42,8 @@ class MainActivity : AppCompatActivity() {
                     this@MainActivity,
                     it,
                     onUpClick = ::onUpClick,
-                    onPinClick = ::onPinClick
+                    onPinClick = ::onPinClick,
+                    onNoteClick = ::onNoteClick
                 )
                 binding?.recyclerview?.adapter = noteAdapter
             }
@@ -81,7 +83,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun changeMainBackgroundColor(color: Int) {
-        binding?.main?.setBackgroundColor(
+        binding?.edittextBackground?.setBackgroundColor(
             ContextCompat.getColor(
                 applicationContext,
                 color
@@ -128,5 +130,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun onPinClick(note: Note) {
         model.togglePin(note)
+    }
+
+    private fun onNoteClick(note: Note) {
+        supportFragmentManager.beginTransaction().add(R.id.main, NoteFragment.newInstance(note))
+            .addToBackStack(NoteFragment::class.java.name).commit()
+    }
+
+    override fun onBackPressed() {
+        val count = supportFragmentManager.backStackEntryCount
+        if (count == 0) {
+            super.onBackPressed()
+        } else {
+            supportFragmentManager.popBackStack()
+        }
     }
 }
