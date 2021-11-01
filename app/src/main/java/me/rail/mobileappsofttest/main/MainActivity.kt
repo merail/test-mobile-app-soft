@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             model.notes.observeForever {
                 val noteAdapter = NoteAdapter(
+                    this@MainActivity,
                     it,
                     onUpClick = ::onUpClick,
                     onPinClick = ::onPinClick

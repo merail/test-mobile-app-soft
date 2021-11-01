@@ -1,6 +1,7 @@
 package me.rail.mobileappsofttest.main
 
-import android.util.Log
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
@@ -12,6 +13,7 @@ import me.rail.mobileappsofttest.db.Note
 
 
 class NoteAdapter(
+    private val context: Context,
     private val notes: List<Note>,
     private val onUpClick: ((Note) -> Unit)? = null,
     private val onPinClick: ((Note) -> Unit)? = null
@@ -49,6 +51,14 @@ class NoteAdapter(
 
         holder.binding.text.text =
             HtmlCompat.fromHtml(getEditedText(item.text), HtmlCompat.FROM_HTML_MODE_LEGACY)
+
+        holder.binding.share.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "text/plain"
+            intent.putExtra(Intent.EXTRA_TEXT, item.text)
+
+            context.startActivity(Intent.createChooser(intent, "Share Note"))
+        }
     }
 
     override fun getItemCount() = notes.size
@@ -67,5 +77,4 @@ class NoteAdapter(
 
         return editedText
     }
-
 }
