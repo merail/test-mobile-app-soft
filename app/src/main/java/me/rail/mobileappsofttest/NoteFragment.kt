@@ -28,6 +28,10 @@ class NoteFragment : Fragment() {
     ): View? {
         binding = FragmentNoteBinding.inflate(inflater, container, false)
 
+        binding?.back?.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
         binding?.edittext?.text?.insert(0, note?.text)
 
         return binding?.root

@@ -1,6 +1,7 @@
 package me.rail.mobileappsofttest.main
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -39,11 +40,11 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             model.notes.observeForever {
                 val noteAdapter = NoteAdapter(
-                    this@MainActivity,
                     it,
                     onUpClick = ::onUpClick,
+                    onNoteClick = ::onNoteClick,
+                    onShareClick = ::onShareClick,
                     onPinClick = ::onPinClick,
-                    onNoteClick = ::onNoteClick
                 )
                 binding?.recyclerview?.adapter = noteAdapter
             }
@@ -128,13 +129,21 @@ class MainActivity : AppCompatActivity() {
         model.setNoteToTop(note)
     }
 
-    private fun onPinClick(note: Note) {
-        model.togglePin(note)
-    }
-
     private fun onNoteClick(note: Note) {
         supportFragmentManager.beginTransaction().add(R.id.main, NoteFragment.newInstance(note))
             .addToBackStack(NoteFragment::class.java.name).commit()
+    }
+
+    private fun onShareClick(text: String) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_TEXT, text)
+
+        startActivity(Intent.createChooser(intent, "Share Note"))
+    }
+
+    private fun onPinClick(note: Note) {
+        model.togglePin(note)
     }
 
     override fun onBackPressed() {
