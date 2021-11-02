@@ -15,6 +15,9 @@ class MainViewModel @Inject constructor(private val notesDao: NotesDao) : ViewMo
     private val mutableTextForShare = MutableLiveData<String>()
     val textForShare: LiveData<String> get() = mutableTextForShare
 
+    private val mutableAddingNoteFromSelectedNote = MutableLiveData<Unit>()
+    val addingNoteFromSelectedNote: LiveData<Unit> get() = mutableAddingNoteFromSelectedNote
+
     val notes = liveData {
         val allNotes = notesDao.getAll()
         allNotes.collect {
@@ -72,5 +75,9 @@ class MainViewModel @Inject constructor(private val notesDao: NotesDao) : ViewMo
 
     fun selectTextForShare(text: String) {
         mutableTextForShare.value = text
+    }
+
+    fun setIsAddingNoteFromSelectedNote() {
+        mutableAddingNoteFromSelectedNote.value = Unit
     }
 }

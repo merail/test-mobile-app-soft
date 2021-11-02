@@ -51,17 +51,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding?.add?.setOnClickListener {
-            changBackgroundColor(R.color.blur)
-            toggleEditTextVisibility()
-            binding?.edittext?.requestFocus()
-            toggleKeyboardVisibility()
-            binding?.edittext?.setOnKeyboardBackPressedListener(getOnKeyboardBackPressedListener())
+            onAddClick()
         }
 
         binding?.create?.setOnClickListener {
             toggleEditTextVisibility()
             toggleKeyboardVisibility()
-            changBackgroundColor(R.color.white)
+            changBackgroundColor(R.color.transparent)
             model.addNote(binding?.edittext?.text.toString())
             binding?.edittext?.text?.clear()
         }
@@ -69,6 +65,21 @@ class MainActivity : AppCompatActivity() {
         model.textForShare.observe(this, {
             onShareClick(it)
         })
+
+        model.addingNoteFromSelectedNote.observe(this, {
+            binding?.edittextBackground?.bringToFront()
+            onAddClick()
+        })
+    }
+
+    private fun onAddClick() {
+        changBackgroundColor(R.color.blur)
+        toggleEditTextVisibility()
+        binding?.edittext?.bringToFront()
+        binding?.create?.bringToFront()
+        binding?.edittext?.requestFocus()
+        toggleKeyboardVisibility()
+        binding?.edittext?.setOnKeyboardBackPressedListener(getOnKeyboardBackPressedListener())
     }
 
     private fun getOnKeyboardBackPressedListener(): MutableLiveData<Boolean> {
@@ -79,7 +90,7 @@ class MainActivity : AppCompatActivity() {
             if (it) {
                 isKeyboardVisible = !isKeyboardVisible
                 toggleEditTextVisibility()
-                changBackgroundColor(R.color.white)
+                changBackgroundColor(R.color.transparent)
                 binding?.edittext?.text?.clear()
             }
         }
@@ -134,7 +145,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onNoteClick(note: Note) {
-        supportFragmentManager.beginTransaction().add(R.id.fragmentContainer, NoteFragment.newInstance(note))
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragmentContainer, NoteFragment.newInstance(note))
             .addToBackStack(NoteFragment::class.java.name).commit()
     }
 
