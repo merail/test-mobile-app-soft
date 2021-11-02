@@ -35,4 +35,7 @@ interface NotesDao {
 
     @Query("SELECT COUNT(position) FROM notes WHERE pin = 1")
     fun getPinnedCount(): Int
+
+    @Query("SELECT * FROM notes WHERE position = :position")
+    fun getNoteByPosition(position: Int): Flow<Note>
 }
