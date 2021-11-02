@@ -95,5 +95,10 @@
             app:layout_constraintTop_toTopOf="@id/edittext"
             app:layout_constraintEnd_toEndOf="@id/edittext"
             android:contentDescription="@string/create_new_note" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

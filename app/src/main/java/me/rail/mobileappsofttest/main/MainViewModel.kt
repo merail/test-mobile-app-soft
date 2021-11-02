@@ -1,9 +1,7 @@
 package me.rail.mobileappsofttest.main
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -14,6 +12,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val notesDao: NotesDao) : ViewModel() {
+    private val mutableTextForShare = MutableLiveData<String>()
+    val textForShare: LiveData<String> get() = mutableTextForShare
+
     val notes = liveData {
         val allNotes = notesDao.getAll()
         allNotes.collect {
@@ -40,7 +41,8 @@ class MainViewModel @Inject constructor(private val notesDao: NotesDao) : ViewMo
             }
 
             val position = if (isFromPinClick) 0 else notesDao.getPinnedCount()
-            val positionBeforePin = if (isFromPinClick) note.positionBeforePin else notesDao.getPinnedCount()
+            val positionBeforePin =
+                if (isFromPinClick) note.positionBeforePin else notesDao.getPinnedCount()
             val pin = if (isFromPinClick) true else note.pin
             notesDao.insert(
                 note.copy(
@@ -66,5 +68,9 @@ class MainViewModel @Inject constructor(private val notesDao: NotesDao) : ViewMo
                 notesDao.insert(note.copy(position = note.positionBeforePin, pin = false))
             }
         }
+    }
+
+    fun selectTextForShare(text: String) {
+        mutableTextForShare.value = text
     }
 }

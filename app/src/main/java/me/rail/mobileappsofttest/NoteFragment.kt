@@ -2,13 +2,18 @@ package me.rail.mobileappsofttest
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 import me.rail.mobileappsofttest.databinding.FragmentNoteBinding
 import me.rail.mobileappsofttest.db.Note
 import me.rail.mobileappsofttest.db.NotesDao
@@ -23,7 +28,7 @@ class NoteFragment : Fragment() {
 
     private var note: Note? = null
 
-    private val mainViewModel: MainViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private var isPinned = false
 
@@ -62,11 +67,9 @@ class NoteFragment : Fragment() {
         }
 
         binding?.share?.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_TEXT, note?.text)
-
-            startActivity(Intent.createChooser(intent, "Share Note"))
+            note?.let {
+                mainViewModel.selectTextForShare(it.text)
+            }
         }
 
         binding?.edittext?.text?.insert(0, note?.text)

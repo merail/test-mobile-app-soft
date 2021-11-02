@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding?.add?.setOnClickListener {
-            changeMainBackgroundColor(R.color.blur)
+            changBackgroundColor(R.color.blur)
             toggleEditTextVisibility()
             binding?.edittext?.requestFocus()
             toggleKeyboardVisibility()
@@ -61,10 +61,14 @@ class MainActivity : AppCompatActivity() {
         binding?.create?.setOnClickListener {
             toggleEditTextVisibility()
             toggleKeyboardVisibility()
-            changeMainBackgroundColor(R.color.white)
+            changBackgroundColor(R.color.white)
             model.addNote(binding?.edittext?.text.toString())
             binding?.edittext?.text?.clear()
         }
+
+        model.textForShare.observe(this, {
+            onShareClick(it)
+        })
     }
 
     private fun getOnKeyboardBackPressedListener(): MutableLiveData<Boolean> {
@@ -75,7 +79,7 @@ class MainActivity : AppCompatActivity() {
             if (it) {
                 isKeyboardVisible = !isKeyboardVisible
                 toggleEditTextVisibility()
-                changeMainBackgroundColor(R.color.white)
+                changBackgroundColor(R.color.white)
                 binding?.edittext?.text?.clear()
             }
         }
@@ -83,7 +87,7 @@ class MainActivity : AppCompatActivity() {
         return onKeyboardBackPressed
     }
 
-    private fun changeMainBackgroundColor(color: Int) {
+    private fun changBackgroundColor(color: Int) {
         binding?.edittextBackground?.setBackgroundColor(
             ContextCompat.getColor(
                 applicationContext,
@@ -130,7 +134,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onNoteClick(note: Note) {
-        supportFragmentManager.beginTransaction().add(R.id.main, NoteFragment.newInstance(note))
+        supportFragmentManager.beginTransaction().add(R.id.fragmentContainer, NoteFragment.newInstance(note))
             .addToBackStack(NoteFragment::class.java.name).commit()
     }
 
