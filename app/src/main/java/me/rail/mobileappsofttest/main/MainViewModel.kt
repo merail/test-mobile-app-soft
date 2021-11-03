@@ -26,6 +26,13 @@ class MainViewModel @Inject constructor(private val notesDao: NotesDao) : ViewMo
         }
     }
 
+    val pinnedCount = liveData {
+        val count = notesDao.getPinnedCount()
+        count.collect {
+            emit(it)
+        }
+    }
+
     fun addNote(text: String) {
         viewModelScope.launch(Dispatchers.IO) {
             notesDao.insert(Note(notesDao.getCount(), text, false, notesDao.getCount()))
@@ -36,7 +43,9 @@ class MainViewModel @Inject constructor(private val notesDao: NotesDao) : ViewMo
         viewModelScope.launch(Dispatchers.IO) {
             notesDao.delete(note)
 
-            val position = if (isFromPinClick || note.pin) 0 else notesDao.getPinnedCount()
+            val pinnedCount = pinnedCount.value ?: 0
+
+            val position = if (isFromPinClick || note.pin) 0 else pinnedCount
 
             for (i in note.position downTo position) {
                 notesDao.incrementPosition(i)
@@ -44,7 +53,7 @@ class MainViewModel @Inject constructor(private val notesDao: NotesDao) : ViewMo
             }
 
             val positionBeforePin =
-                if (isFromPinClick) note.positionBeforePin else notesDao.getPinnedCount()
+                if (isFromPinClick) note.positionBeforePin else pinnedCount
             val pin = if (isFromPinClick) true else note.pin
             notesDao.insert(
                 note.copy(
@@ -82,9 +91,18 @@ class MainViewModel @Inject constructor(private val notesDao: NotesDao) : ViewMo
 
     fun onNoteMove(from: Int, to: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            notes.value?.let {
-                val noteFrom = it[from]
-                val noteTo = it[to]
+            notes.value?.let { notes ->
+                val noteFrom = notes[from]
+
+                val pinnedCount = pinnedCount.value ?: 0
+
+                val to1 = if (noteFrom.pin) {
+                    if (to >= pinnedCount) pinnedCount - 1 else to
+                } else {
+                    if (to >= pinnedCount) to else pinnedCount
+                }
+
+                val noteTo = notes[to1]
 
                 notesDao.delete(noteFrom)
                 notesDao.delete(noteTo)
@@ -95,8 +113,8 @@ class MainViewModel @Inject constructor(private val notesDao: NotesDao) : ViewMo
                         positionBeforePin = noteTo.position
                     )
                 )
-                if (from > to) {
-                    for (i in from - 1 downTo to + 1) {
+                if (from > to1) {
+                    for (i in from - 1 downTo to1 + 1) {
                         notesDao.incrementPosition(i)
                         notesDao.incrementPositionBeforePin(i)
                     }
@@ -108,7 +126,7 @@ class MainViewModel @Inject constructor(private val notesDao: NotesDao) : ViewMo
                         )
                     )
                 } else {
-                    for (i in from + 1 until to) {
+                    for (i in from + 1 until to1) {
                         notesDao.decrementPosition(i)
                         notesDao.decrementPositionBeforePin(i)
                     }

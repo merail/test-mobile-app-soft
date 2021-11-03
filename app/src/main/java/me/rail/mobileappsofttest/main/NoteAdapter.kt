@@ -104,15 +104,4 @@ class NoteAdapter(
 
         return editedText
     }
-
-    fun moveItem(from: Int, to: Int) {
-//        val fromEmoji = items?.get(from) ?: return
-//        items.removeAt(from)
-//        Log.d("test", "$from $to")
-//        if (to < from) {
-//            items.add(to, fromEmoji)
-//        } else {
-//            items.add(to - 1, fromEmoji)
-//        }
-    }
 }

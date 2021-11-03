@@ -35,6 +35,8 @@ class MainActivity : AppCompatActivity() {
 
     private var adapter: NoteAdapter? = null
 
+    private var pinnedCount = 0
+
     private val itemTouchHelper by lazy {
         val simpleItemTouchCallback =
             object : ItemTouchHelper.SimpleCallback(
@@ -53,11 +55,22 @@ class MainActivity : AppCompatActivity() {
                     val adapter = recyclerView.adapter as NoteAdapter
                     val from = viewHolder.adapterPosition
                     val to = target.adapterPosition
-                    if (this@MainActivity.fromDragPosition == -1)
-                        this@MainActivity.fromDragPosition = from
-                    this@MainActivity.toDragPosition = to
+                    if (fromDragPosition == -1) {
+                        fromDragPosition = from
+                    }
 
-                    adapter.notifyItemMoved(from, to)
+                    if (pinnedCount == 0) {
+                        toDragPosition = to
+                    } else {
+                        if (fromDragPosition < pinnedCount) {
+                            if (to >= toDragPosition)
+                                toDragPosition = pinnedCount - 1
+                        } else {
+                            toDragPosition = if (to >= pinnedCount) to else pinnedCount
+                        }
+                    }
+
+                    adapter.notifyItemMoved(from, toDragPosition)
 
                     return true
                 }
@@ -86,7 +99,8 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     super.clearView(recyclerView, viewHolder)
                     viewHolder.itemView.alpha = 1.0f
-                    model.onNoteMove(fromDragPosition, toDragPosition)
+                    if (fromDragPosition != toDragPosition && fromDragPosition != -1)
+                        model.onNoteMove(fromDragPosition, toDragPosition)
                     fromDragPosition = -1
                 }
             }
@@ -102,6 +116,10 @@ class MainActivity : AppCompatActivity() {
 
         model.notes.observeForever {
             adapter?.setItems(it)
+        }
+
+        model.pinnedCount.observeForever {
+            pinnedCount = it
         }
 
         binding?.add?.setOnClickListener {
