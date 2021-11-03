@@ -36,14 +36,13 @@ class MainViewModel @Inject constructor(private val notesDao: NotesDao) : ViewMo
         viewModelScope.launch(Dispatchers.IO) {
             notesDao.delete(note)
 
-            val lastPositionInCycle = if (isFromPinClick) 0 else notesDao.getPinnedCount()
+            val position = if (isFromPinClick || note.pin) 0 else notesDao.getPinnedCount()
 
-            for (i in note.position downTo lastPositionInCycle) {
+            for (i in note.position downTo position) {
                 notesDao.incrementPosition(i)
                 notesDao.incrementPositionBeforePin(i)
             }
 
-            val position = if (isFromPinClick) 0 else notesDao.getPinnedCount()
             val positionBeforePin =
                 if (isFromPinClick) note.positionBeforePin else notesDao.getPinnedCount()
             val pin = if (isFromPinClick) true else note.pin
