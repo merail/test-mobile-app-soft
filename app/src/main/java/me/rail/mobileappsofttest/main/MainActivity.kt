@@ -20,6 +20,7 @@ import me.rail.mobileappsofttest.NoteFragment
 import me.rail.mobileappsofttest.R
 import me.rail.mobileappsofttest.databinding.ActivityMainBinding
 import me.rail.mobileappsofttest.db.Note
+import me.rail.mobileappsofttest.view.SimpleItemTouchCallback
 
 
 @AndroidEntryPoint
@@ -30,82 +31,9 @@ class MainActivity : AppCompatActivity() {
 
     private var isKeyboardVisible = false
 
-    private var fromDragPosition = -1
-    private var toDragPosition = -1
-
     private var adapter: NoteAdapter? = null
 
-    private var pinnedCount = 0
-
-    private val itemTouchHelper by lazy {
-        val simpleItemTouchCallback =
-            object : ItemTouchHelper.SimpleCallback(
-                UP or
-                        DOWN or
-                        START or
-                        END, 0
-            ) {
-
-                override fun onMove(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder,
-                    target: RecyclerView.ViewHolder
-                ): Boolean {
-
-                    val adapter = recyclerView.adapter as NoteAdapter
-                    val from = viewHolder.adapterPosition
-                    val to = target.adapterPosition
-                    if (fromDragPosition == -1) {
-                        fromDragPosition = from
-                    }
-
-                    if (pinnedCount == 0) {
-                        toDragPosition = to
-                    } else {
-                        if (fromDragPosition < pinnedCount) {
-                            if (to >= toDragPosition)
-                                toDragPosition = pinnedCount - 1
-                        } else {
-                            toDragPosition = if (to >= pinnedCount) to else pinnedCount
-                        }
-                    }
-
-                    adapter.notifyItemMoved(from, toDragPosition)
-
-                    return true
-                }
-
-                override fun onSwiped(
-                    viewHolder: RecyclerView.ViewHolder,
-                    direction: Int
-                ) {
-
-                }
-
-                override fun onSelectedChanged(
-                    viewHolder: RecyclerView.ViewHolder?,
-                    actionState: Int
-                ) {
-                    super.onSelectedChanged(viewHolder, actionState)
-
-                    if (actionState == ACTION_STATE_DRAG) {
-                        viewHolder?.itemView?.alpha = 0.5f
-                    }
-                }
-
-                override fun clearView(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder
-                ) {
-                    super.clearView(recyclerView, viewHolder)
-                    viewHolder.itemView.alpha = 1.0f
-                    if (fromDragPosition != toDragPosition && fromDragPosition != -1)
-                        model.onNoteMove(fromDragPosition, toDragPosition)
-                    fromDragPosition = -1
-                }
-            }
-        ItemTouchHelper(simpleItemTouchCallback)
-    }
+    private var simpleItemTouchCallback: SimpleItemTouchCallback? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         model.pinnedCount.observeForever {
-            pinnedCount = it
+            simpleItemTouchCallback?.setPinnedCount(it)
         }
 
         binding?.add?.setOnClickListener {
@@ -201,6 +129,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initializeRecyclerView() {
+        simpleItemTouchCallback = SimpleItemTouchCallback(
+            UP or
+                    DOWN or
+                    START or
+                    END, 0,
+            onDragFinished = ::onDragFinished
+        )
+
+        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback!!)
+
         itemTouchHelper.attachToRecyclerView(binding?.recyclerview)
 
         binding?.recyclerview?.layoutManager =
@@ -243,6 +181,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun onPinClick(note: Note) {
         model.togglePin(note)
+    }
+
+    private fun onDragFinished(fromDragPosition: Int, toDragPosition: Int) {
+        model.onNoteMove(fromDragPosition, toDragPosition)
     }
 
     override fun onBackPressed() {

@@ -18,7 +18,7 @@ class NoteAdapter(
     private val onUpClick: ((Note) -> Unit)? = null,
     private val onNoteClick: ((Note) -> Unit)? = null,
     private val onShareClick: ((String) -> Unit)? = null,
-    private val onPinClick: ((Note) -> Unit)? = null,
+    private val onPinClick: ((Note) -> Unit)? = null
 ) :
     RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
 
