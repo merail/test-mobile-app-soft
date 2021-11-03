@@ -29,18 +29,22 @@ class SimpleItemTouchCallback(
         val adapter = recyclerView.adapter as NoteAdapter
         val from = viewHolder.adapterPosition
         val to = target.adapterPosition
+
         if (fromDragPosition == -1) {
             fromDragPosition = from
         }
 
-        if (pinnedCount == 0) {
-            toDragPosition = to
+        toDragPosition = if (pinnedCount == 0) {
+            to
         } else {
             if (fromDragPosition < pinnedCount) {
-                if (to >= toDragPosition)
-                    toDragPosition = pinnedCount - 1
+                if (to >= pinnedCount) {
+                    pinnedCount - 1
+                } else {
+                    to
+                }
             } else {
-                toDragPosition = if (to >= pinnedCount) to else pinnedCount
+                if (to >= pinnedCount) to else pinnedCount
             }
         }
 
