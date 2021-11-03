@@ -10,12 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ItemTouchHelper.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import me.rail.mobileappsofttest.NoteFragment
 import me.rail.mobileappsofttest.R
 import me.rail.mobileappsofttest.databinding.ActivityMainBinding
@@ -30,6 +30,69 @@ class MainActivity : AppCompatActivity() {
 
     private var isKeyboardVisible = false
 
+    private var fromDragPosition = -1
+    private var toDragPosition = -1
+
+    private var adapter: NoteAdapter? = null
+
+    private val itemTouchHelper by lazy {
+        val simpleItemTouchCallback =
+            object : ItemTouchHelper.SimpleCallback(
+                UP or
+                        DOWN or
+                        START or
+                        END, 0
+            ) {
+
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+
+                    val adapter = recyclerView.adapter as NoteAdapter
+                    val from = viewHolder.adapterPosition
+                    val to = target.adapterPosition
+                    if (this@MainActivity.fromDragPosition == -1)
+                        this@MainActivity.fromDragPosition = from
+                    this@MainActivity.toDragPosition = to
+
+                    adapter.notifyItemMoved(from, to)
+
+                    return true
+                }
+
+                override fun onSwiped(
+                    viewHolder: RecyclerView.ViewHolder,
+                    direction: Int
+                ) {
+
+                }
+
+                override fun onSelectedChanged(
+                    viewHolder: RecyclerView.ViewHolder?,
+                    actionState: Int
+                ) {
+                    super.onSelectedChanged(viewHolder, actionState)
+
+                    if (actionState == ACTION_STATE_DRAG) {
+                        viewHolder?.itemView?.alpha = 0.5f
+                    }
+                }
+
+                override fun clearView(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder
+                ) {
+                    super.clearView(recyclerView, viewHolder)
+                    viewHolder.itemView.alpha = 1.0f
+                    model.onNoteMove(fromDragPosition, toDragPosition)
+                    fromDragPosition = -1
+                }
+            }
+        ItemTouchHelper(simpleItemTouchCallback)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -37,17 +100,8 @@ class MainActivity : AppCompatActivity() {
 
         initializeRecyclerView()
 
-        lifecycleScope.launch {
-            model.notes.observeForever {
-                val noteAdapter = NoteAdapter(
-                    it,
-                    onUpClick = ::onUpClick,
-                    onNoteClick = ::onNoteClick,
-                    onShareClick = ::onShareClick,
-                    onPinClick = ::onPinClick,
-                )
-                binding?.recyclerview?.adapter = noteAdapter
-            }
+        model.notes.observeForever {
+            adapter?.setItems(it)
         }
 
         binding?.add?.setOnClickListener {
@@ -129,6 +183,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initializeRecyclerView() {
+        itemTouchHelper.attachToRecyclerView(binding?.recyclerview)
+
         binding?.recyclerview?.layoutManager =
             LinearLayoutManager(applicationContext, RecyclerView.VERTICAL, false)
 
@@ -138,6 +194,15 @@ class MainActivity : AppCompatActivity() {
                 DividerItemDecoration.VERTICAL
             )
         )
+
+        adapter = NoteAdapter(
+            onUpClick = ::onUpClick,
+            onNoteClick = ::onNoteClick,
+            onShareClick = ::onShareClick,
+            onPinClick = ::onPinClick,
+        )
+
+        binding?.recyclerview?.adapter = adapter
     }
 
     private fun onUpClick(note: Note) {

@@ -80,4 +80,48 @@ class MainViewModel @Inject constructor(private val notesDao: NotesDao) : ViewMo
     fun setIsAddingNoteFromSelectedNote() {
         mutableAddingNoteFromSelectedNote.value = Unit
     }
+
+    fun onNoteMove(from: Int, to: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            notes.value?.let {
+                val noteFrom = it[from]
+                val noteTo = it[to]
+
+                notesDao.delete(noteFrom)
+                notesDao.delete(noteTo)
+
+                notesDao.insert(
+                    noteFrom.copy(
+                        position = noteTo.position,
+                        positionBeforePin = noteTo.position
+                    )
+                )
+                if (from > to) {
+                    for (i in from - 1 downTo to + 1) {
+                        notesDao.incrementPosition(i)
+                        notesDao.incrementPositionBeforePin(i)
+                    }
+
+                    notesDao.insert(
+                        noteTo.copy(
+                            position = noteTo.position + 1,
+                            positionBeforePin = noteTo.position + 1
+                        )
+                    )
+                } else {
+                    for (i in from + 1 until to) {
+                        notesDao.decrementPosition(i)
+                        notesDao.decrementPositionBeforePin(i)
+                    }
+
+                    notesDao.insert(
+                        noteTo.copy(
+                            position = noteTo.position - 1,
+                            positionBeforePin = noteTo.position - 1
+                        )
+                    )
+                }
+            }
+        }
+    }
 }
