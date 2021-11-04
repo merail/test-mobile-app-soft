@@ -141,4 +141,10 @@ class MainViewModel @Inject constructor(private val notesDao: NotesDao) : ViewMo
             }
         }
     }
+
+    fun updateNote(note: Note) {
+        viewModelScope.launch {
+            notesDao.update(note)
+        }
+    }
 }

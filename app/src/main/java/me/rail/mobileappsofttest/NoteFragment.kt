@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
@@ -84,6 +83,18 @@ class NoteFragment : Fragment() {
                         requireContext(),
                         R.drawable.pin_filled
                     ) else AppCompatResources.getDrawable(requireContext(), R.drawable.pin)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        note?.let {
+            val text = binding?.edittext?.text?.toString()
+            if (it.text != text) {
+                if (text != null)
+                    mainViewModel.updateNote(it.copy(text = text))
+            }
         }
     }
 
