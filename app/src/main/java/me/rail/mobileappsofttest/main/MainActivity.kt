@@ -3,6 +3,7 @@ package me.rail.mobileappsofttest.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
@@ -70,6 +71,11 @@ class MainActivity : AppCompatActivity() {
             binding?.edittextBackground?.bringToFront()
             onAddClick()
         })
+
+        binding?.edittextBackground?.setOnClickListener {
+            toggleKeyboardVisibility()
+            onKeyboardBackPressed()
+        }
     }
 
     private fun onAddClick() {
@@ -82,20 +88,21 @@ class MainActivity : AppCompatActivity() {
         binding?.edittext?.setOnKeyboardBackPressedListener(getOnKeyboardBackPressedListener())
     }
 
-    private fun getOnKeyboardBackPressedListener(): MutableLiveData<Boolean> {
-        val onKeyboardBackPressed = MutableLiveData<Boolean>()
-        onKeyboardBackPressed.value = false
+    private fun getOnKeyboardBackPressedListener(): MutableLiveData<Unit> {
+        val onKeyboardBackPressed = MutableLiveData<Unit>()
 
         onKeyboardBackPressed.observeForever {
-            if (it) {
-                isKeyboardVisible = !isKeyboardVisible
-                toggleEditTextVisibility()
-                changBackgroundColor(R.color.transparent)
-                binding?.edittext?.text?.clear()
-            }
+            isKeyboardVisible = !isKeyboardVisible
+            onKeyboardBackPressed()
         }
 
         return onKeyboardBackPressed
+    }
+
+    private fun onKeyboardBackPressed() {
+        toggleEditTextVisibility()
+        changBackgroundColor(R.color.transparent)
+        binding?.edittext?.text?.clear()
     }
 
     private fun changBackgroundColor(color: Int) {
@@ -105,6 +112,13 @@ class MainActivity : AppCompatActivity() {
                 color
             )
         )
+
+        toggleEditTextBackgroundVisibility()
+    }
+
+    private fun toggleEditTextBackgroundVisibility() {
+        binding?.edittextBackground?.visibility =
+            if (binding?.edittextBackground?.visibility == View.GONE) View.VISIBLE else View.GONE
     }
 
     private fun toggleEditTextVisibility() {
