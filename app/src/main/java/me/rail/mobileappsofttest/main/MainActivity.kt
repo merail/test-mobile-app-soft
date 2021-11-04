@@ -3,7 +3,6 @@ package me.rail.mobileappsofttest.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
@@ -59,8 +58,11 @@ class MainActivity : AppCompatActivity() {
             toggleEditTextVisibility()
             toggleKeyboardVisibility()
             changBackgroundColor(R.color.transparent)
-            model.addNote(binding?.edittext?.text.toString())
-            binding?.edittext?.text?.clear()
+            val text = binding?.edittext?.text.toString()
+            if (text.isNotEmpty()) {
+                model.addNote(binding?.edittext?.text.toString())
+                binding?.edittext?.text?.clear()
+            }
         }
 
         model.textForShare.observe(this, {
