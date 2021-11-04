@@ -18,9 +18,24 @@ interface NotesDao {
     @Delete
     suspend fun delete(vararg note: Note)
 
-    @Query("UPDATE notes SET pin = :pin WHERE id =:id")
-    suspend fun update(id: String, pin: Boolean)
+    @Query("UPDATE notes SET position = :position + 1 WHERE position = :position")
+    suspend fun incrementPosition(position: Int)
 
-    @Query("SELECT COUNT(id) FROM notes")
+    @Query("UPDATE notes SET positionBeforePin = :position + 1 WHERE positionBeforePin = :position")
+    suspend fun incrementPositionBeforePin(position: Int)
+
+    @Query("UPDATE notes SET position = :position - 1 WHERE position = :position")
+    suspend fun decrementPosition(position: Int)
+
+    @Query("UPDATE notes SET positionBeforePin = :position - 1 WHERE positionBeforePin = :position")
+    suspend fun decrementPositionBeforePin(position: Int)
+
+    @Query("SELECT COUNT(position) FROM notes")
     fun getCount(): Int
+
+    @Query("SELECT COUNT(position) FROM notes WHERE pin = 1")
+    fun getPinnedCount(): Flow<Int>
+
+    @Query("SELECT * FROM notes WHERE position = :position")
+    fun getNoteByPosition(position: Int): Flow<Note>
 }

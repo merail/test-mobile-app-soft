@@ -1,31 +1,34 @@
 package me.rail.mobileappsofttest
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import dagger.hilt.android.AndroidEntryPoint
+import me.rail.mobileappsofttest.databinding.FragmentNoteBinding
+import me.rail.mobileappsofttest.db.Note
+import me.rail.mobileappsofttest.main.MainViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_NOTE = "note"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [NoteFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class NoteFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var binding: FragmentNoteBinding? = null
+
+    private var note: Note? = null
+
+    private val mainViewModel: MainViewModel by activityViewModels()
+
+    private var isPinned = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            note = it.getParcelable(ARG_NOTE)
         }
     }
 
@@ -33,26 +36,74 @@ class NoteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_note, container, false)
+        binding = FragmentNoteBinding.inflate(inflater, container, false)
+
+        binding?.back?.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
+        isPinned = note?.pin == true
+
+        setPinButtonBackground(isPinned)
+
+        binding?.pin?.setOnClickListener {
+            note?.let {
+                isPinned = !isPinned
+                setPinButtonBackground(isPinned)
+                mainViewModel.togglePin(it)
+                val position = if (isPinned) 0 else it.positionBeforePin
+                note = note?.copy(position = position, pin = isPinned)
+            }
+        }
+
+        binding?.share?.setOnClickListener {
+            note?.let {
+                mainViewModel.selectTextForShare(it.text)
+            }
+        }
+
+        binding?.edittext?.text?.insert(0, note?.text)
+
+        binding?.add?.setOnClickListener {
+            mainViewModel.setIsAddingNoteFromSelectedNote()
+        }
+
+        return binding?.root
+    }
+
+    private fun setPinButtonBackground(pin: Boolean) {
+        binding?.pin?.apply {
+            background =
+                if (pin)
+                    AppCompatResources.getDrawable(
+                        requireContext(),
+                        R.drawable.pin_filled
+                    ) else AppCompatResources.getDrawable(requireContext(), R.drawable.pin)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        note?.let {
+            val text = binding?.edittext?.text?.toString()
+            if (text != null && text.isNotEmpty()) {
+                Log.d("test", text.length.toString())
+                if (it.text != text) {
+                    mainViewModel.updateNote(it.copy(text = text))
+                }
+            } else {
+                mainViewModel.deleteNote(it)
+            }
+        }
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment NoteFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(note: Note) =
             NoteFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putParcelable(ARG_NOTE, note)
                 }
             }
     }

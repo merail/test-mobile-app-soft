@@ -4,13 +4,17 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Admin/StudioProjects/mobileappsofttest/app/src/main/res/drawable/archive.xml" value="0.14635416666666667" />
+        <entry key="..\:/Users/Admin/StudioProjects/mobileappsofttest/app/src/main/res/drawable/back.xml" value="0.1296875" />
+        <entry key="..\:/Users/Admin/StudioProjects/mobileappsofttest/app/src/main/res/drawable/black_circle.xml" value="0.26614583333333336" />
+        <entry key="..\:/Users/Admin/StudioProjects/mobileappsofttest/app/src/main/res/drawable/not_pin.xml" value="0.1296875" />
         <entry key="..\:/Users/Admin/StudioProjects/mobileappsofttest/app/src/main/res/drawable/pin.xml" value="0.13541666666666666" />
+        <entry key="..\:/Users/Admin/StudioProjects/mobileappsofttest/app/src/main/res/drawable/pin_filled.xml" value="0.2703125" />
         <entry key="..\:/Users/Admin/StudioProjects/mobileappsofttest/app/src/main/res/drawable/share.xml" value="0.13541666666666666" />
         <entry key="..\:/Users/Admin/StudioProjects/mobileappsofttest/app/src/main/res/drawable/up.xml" value="0.13541666666666666" />
         <entry key="..\:/Users/Admin/StudioProjects/mobileappsofttest/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/Admin/StudioProjects/mobileappsofttest/app/src/main/res/layout/dialog_fragment_edit_text.xml" value="0.11927083333333334" />
         <entry key="..\:/Users/Admin/StudioProjects/mobileappsofttest/app/src/main/res/layout/fragment_note.xml" value="0.1634963768115942" />
-        <entry key="..\:/Users/Admin/StudioProjects/mobileappsofttest/app/src/main/res/layout/item_note.xml" value="0.3255208333333333" />
+        <entry key="..\:/Users/Admin/StudioProjects/mobileappsofttest/app/src/main/res/layout/item_note.xml" value="0.42213642213642216" />
       </map>
     </option>
   </component>

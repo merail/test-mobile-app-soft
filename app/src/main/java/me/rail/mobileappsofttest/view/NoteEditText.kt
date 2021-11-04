@@ -9,7 +9,7 @@ import androidx.lifecycle.MutableLiveData
 
 @SuppressLint("AppCompatCustomView")
 class NoteEditText : EditText {
-    private lateinit var onKeyboardBackPressedListener: MutableLiveData<Boolean>
+    private lateinit var onKeyboardBackPressedListener: MutableLiveData<Unit>
 
     constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(
         context,
@@ -23,12 +23,12 @@ class NoteEditText : EditText {
 
     override fun onKeyPreIme(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK)
-            onKeyboardBackPressedListener.value = true
+            onKeyboardBackPressedListener.value = Unit
 
         return super.onKeyPreIme(keyCode, event)
     }
 
-    fun setOnKeyboardBackPressedListener(onKeyboardBackPressedListener: MutableLiveData<Boolean>) {
+    fun setOnKeyboardBackPressedListener(onKeyboardBackPressedListener: MutableLiveData<Unit>) {
         this.onKeyboardBackPressedListener = onKeyboardBackPressedListener
     }
 }
