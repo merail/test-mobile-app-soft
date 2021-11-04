@@ -1,6 +1,7 @@
 package me.rail.mobileappsofttest
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +11,7 @@ import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import me.rail.mobileappsofttest.databinding.FragmentNoteBinding
 import me.rail.mobileappsofttest.db.Note
-import me.rail.mobileappsofttest.db.NotesDao
 import me.rail.mobileappsofttest.main.MainViewModel
-import javax.inject.Inject
 
 private const val ARG_NOTE = "note"
 
@@ -25,9 +24,6 @@ class NoteFragment : Fragment() {
     private val mainViewModel: MainViewModel by activityViewModels()
 
     private var isPinned = false
-
-    @Inject
-    lateinit var notesDao: NotesDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,9 +87,13 @@ class NoteFragment : Fragment() {
 
         note?.let {
             val text = binding?.edittext?.text?.toString()
-            if (it.text != text) {
-                if (text != null)
+            if (text != null && text.isNotEmpty()) {
+                Log.d("test", text.length.toString())
+                if (it.text != text) {
                     mainViewModel.updateNote(it.copy(text = text))
+                }
+            } else {
+                mainViewModel.deleteNote(it)
             }
         }
     }

@@ -147,4 +147,16 @@ class MainViewModel @Inject constructor(private val notesDao: NotesDao) : ViewMo
             notesDao.update(note)
         }
     }
+
+    fun deleteNote(note: Note) {
+        viewModelScope.launch(Dispatchers.IO) {
+            notesDao.delete(note)
+
+            for (i in note.position + 1..notesDao.getCount()) {
+                Log.d("test2", i.toString())
+                notesDao.decrementPosition(i)
+                notesDao.decrementPositionBeforePin(i)
+            }
+        }
+    }
 }
