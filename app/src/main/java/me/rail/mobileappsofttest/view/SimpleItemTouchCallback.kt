@@ -1,8 +1,12 @@
 package me.rail.mobileappsofttest.view
 
+import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import me.rail.mobileappsofttest.R
 import me.rail.mobileappsofttest.main.NoteAdapter
+
 
 class SimpleItemTouchCallback(
     dragDirs: Int,
@@ -10,6 +14,9 @@ class SimpleItemTouchCallback(
     private val onDragFinished: ((Int, Int) -> Unit)? = null
 ) :
     ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
+
+    private var fromViewHolder: RecyclerView.ViewHolder? = null
+    private var toView: View? = null
 
     private var fromDragPosition = -1
     private var toDragPosition = -1
@@ -30,6 +37,8 @@ class SimpleItemTouchCallback(
         val from = viewHolder.adapterPosition
         val to = target.adapterPosition
 
+        val fromView = fromViewHolder?.itemView
+
         if (fromDragPosition == -1) {
             fromDragPosition = from
         }
@@ -48,7 +57,19 @@ class SimpleItemTouchCallback(
             }
         }
 
+        if (toDragPosition == to)
+            toView = target.itemView
+
+        val id = if (from > to) R.id.topDragDividerLayout else R.id.bottomDragDividerLayout
+
+        val fromDragDividerLayout = fromView?.findViewById<ConstraintLayout>(id)
+        val toDragDividerLayout = toView?.findViewById<ConstraintLayout>(id)
+        fromDragDividerLayout?.visibility = View.INVISIBLE
+        toDragDividerLayout?.visibility = View.VISIBLE
+
         adapter.notifyItemMoved(from, toDragPosition)
+
+        fromViewHolder = target
 
         return true
     }

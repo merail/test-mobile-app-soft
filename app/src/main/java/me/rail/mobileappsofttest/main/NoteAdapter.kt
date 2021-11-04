@@ -1,13 +1,10 @@
 package me.rail.mobileappsofttest.main
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.text.HtmlCompat
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import me.rail.mobileappsofttest.R
 import me.rail.mobileappsofttest.databinding.ItemNoteBinding
@@ -58,6 +55,9 @@ class NoteAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items?.get(position) ?: return
+
+        holder.binding.topDragDividerLayout.visibility = View.INVISIBLE
+        holder.binding.bottomDragDividerLayout.visibility = View.INVISIBLE
 
         holder.binding.up.setOnClickListener {
             onUpClick?.invoke(item)
