@@ -58,11 +58,8 @@ class MainActivity : AppCompatActivity() {
             toggleEditTextVisibility()
             toggleKeyboardVisibility()
             changBackgroundColor(R.color.transparent)
-            val text = binding?.edittext?.text.toString()
-            if (text.isNotEmpty()) {
-                model.addNote(binding?.edittext?.text.toString())
-                binding?.edittext?.text?.clear()
-            }
+
+            addNote()
         }
 
         model.textForShare.observe(this, {
@@ -75,6 +72,8 @@ class MainActivity : AppCompatActivity() {
         })
 
         binding?.edittextBackground?.setOnClickListener {
+            addNote()
+
             toggleKeyboardVisibility()
             onKeyboardBackPressed()
         }
@@ -201,6 +200,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun onDragFinished(fromDragPosition: Int, toDragPosition: Int) {
         model.onNoteMove(fromDragPosition, toDragPosition)
+    }
+
+    private fun addNote() {
+        val text = binding?.edittext?.text.toString()
+        if (text.isNotEmpty()) {
+            model.addNote(binding?.edittext?.text.toString())
+            binding?.edittext?.text?.clear()
+        }
     }
 
     override fun onBackPressed() {
